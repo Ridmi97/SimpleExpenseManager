@@ -65,6 +65,12 @@ public abstract class ExpenseManager implements Serializable {
 
         if (!amount.isEmpty()) {
             double amountVal = Double.parseDouble(amount);
+            Account account = accountsHolder.getAccount(accountNo);
+
+            //check whether there are sufficient balance
+            if(((account.getBalance()-amountVal)<0)&expenseType==ExpenseType.EXPENSE){
+                throw new InvalidAccountException("Insufficient Balance");
+            }
             transactionsHolder.logTransaction(transactionDate, accountNo, expenseType, amountVal);
             accountsHolder.updateBalance(accountNo, expenseType, amountVal);
         }
